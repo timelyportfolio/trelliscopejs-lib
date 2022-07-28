@@ -297,6 +297,18 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
         />
       ))
     );
+  } else if  (dObjJson.panelInterface.type === 'react') {
+    dispatch(setPanelRenderers(
+      dObjJson.name,
+      (x) => (
+        <div
+          alt="panel"
+          style={{ width: '100%', height: '100%' }}
+        >
+          {x}
+        </div>
+      ))
+    );
   } else if (dObjJson.panelInterface.type === 'htmlwidget') {
     const prCallback = () => {
       const binding = findWidget(dObjJson.panelInterface.deps.name);
