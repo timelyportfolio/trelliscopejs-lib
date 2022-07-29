@@ -3,6 +3,7 @@ import { json as d3json } from 'd3-request';
 import * as crossfilter from 'crossfilter2';
 import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
 import { loadAssetsSequential, findWidget } from '../loadAssets';
+import { default as hydrate } from '../hydrate'; // eslint-disable-line import/no-named-default
 import {
   SET_APP_ID, SET_FULLSCREEN, WINDOW_RESIZE, UPDATE_DIMS,
   SET_ERROR_MESSAGE, ACTIVE_SIDEBAR, SET_LAYOUT, SET_LABELS, SET_SORT,
@@ -301,14 +302,16 @@ const setPanelInfo = (dObjJson, cfg, dispatch) => {
     dispatch(setPanelRenderers(
       dObjJson.name,
       (x) => (
-        <div
-          alt="panel"
-          style={{ width: '100%', height: '100%' }}
-        >
-          {x}
-        </div>
-      ))
-    );
+        hydrate(
+          {},
+          {
+            name: 'div',
+            attribs: { alt: 'panel', style: { width: '100%', height: '100%' } },
+            children: [x]
+          }
+        )
+      )
+    ))
   } else if (dObjJson.panelInterface.type === 'htmlwidget') {
     const prCallback = () => {
       const binding = findWidget(dObjJson.panelInterface.deps.name);
