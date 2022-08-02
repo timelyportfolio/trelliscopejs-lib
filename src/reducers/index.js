@@ -16,6 +16,8 @@ import _displayInfo from './_displayInfo';
 import _cogDataMutable from './_cogDataMutable';
 import _localPanels from './_localPanels';
 
+import table from './table';
+
 const reducers = combineReducers({
   appId,
   dialog,
@@ -38,7 +40,8 @@ const reducers = combineReducers({
   _displayList,
   _displayInfo,
   _cogDataMutable,
-  _localPanels
+  _localPanels,
+  table,
 });
 
 export default reducers;

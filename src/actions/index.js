@@ -14,7 +14,7 @@ import {
   RECEIVE_COGDATA, REQUEST_CONFIG, RECEIVE_CONFIG,
   SET_DIALOG_OPEN, SET_PANEL_RENDERER, SET_LOCAL_PANELS,
   SB_LOOKUP, SET_DISPSELECT_DIALOG_OPEN, SET_SELECTED_RELDISPS,
-  SET_DISPINFO_DIALOG_OPEN, SET_REL_DISP_POSITIONS
+  SET_DISPINFO_DIALOG_OPEN, SET_REL_DISP_POSITIONS, SET_TABLE
 } from '../constants';
 
 const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
@@ -158,6 +158,10 @@ export const setLocalPanels = (dat) => ({
 export const setErrorMessage = (msg) => ({
   type: SET_ERROR_MESSAGE, msg
 });
+
+export const setTable = (isTable) => ({
+  type: SET_TABLE, isTable
+})
 
 const setCogDatAndState = (iface, cogDatJson, dObjJson, dispatch, hash) => {
   const hashItems = {};

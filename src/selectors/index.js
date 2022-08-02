@@ -60,3 +60,5 @@ export const aspectSelector = createSelector(
     return 0;
   }
 );
+
+export const tableSelector = (state) => state.table;

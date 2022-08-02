@@ -29,6 +29,7 @@ export const SET_LOCAL_PANELS = 'SET_LOCAL_PANELS';
 export const SET_SELECTED_RELDISPS = 'SET_SELECTED_RELDISPS';
 export const SET_REL_DISP_POSITIONS = 'SET_REL_DISP_POSITIONS';
 // export const SET_SELECTED_VIEW = 'SET_SELECTED_VIEW';
+export const SET_TABLE = 'SET_TABLE';
 
 export const SB_PANEL_LAYOUT = 'Panel Grid Layout';
 export const SB_PANEL_FILTER = 'Filter Panels';
