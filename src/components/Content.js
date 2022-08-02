@@ -15,7 +15,7 @@ import { currentCogDataSelector, filterCardinalitySelector } from '../selectors/
 import {
   configSelector, cogInterfaceSelector, layoutSelector, aspectSelector, labelsSelector,
   panelRenderersSelector, curDisplayInfoSelector, nPerPageSelector, pageNumSelector,
-  localPanelsSelector, displayInfoSelector
+  localPanelsSelector, displayInfoSelector, tableSelector
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -23,10 +23,10 @@ const Content = ({
   classes, contentStyle, ccd, ci, cinfo, cfg, layout, labels,
   dims, panelRenderers, panelInterface, sidebar, curPage,
   totPages, panelData, removeLabel, setPageNum, curDisplayInfo,
-  displayInfo, relDispPositions
+  displayInfo, relDispPositions, table
 }) => {
   let ret = <div />;
-
+  let tbl = <div />;
   let names = [curDisplayInfo.info.name];
   if (relDispPositions.length > 0) {
     names = relDispPositions.map((d) => d.name);
@@ -126,9 +126,25 @@ const Content = ({
         </div>
       </Swipeable>
     );
+
+    tbl = (
+      <div className={classes.content} style={contentStyle}>
+        <table>
+          {panelMatrix.map((el) => (
+            <tr>
+              {el.labels.map((cell) => (
+                <td>
+                  {cell.value}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </table>
+      </div>
+    );
   }
 
-  return (ret);
+  return (table ? tbl : ret);
 };
 
 Content.propTypes = {
@@ -147,7 +163,8 @@ Content.propTypes = {
   totPages: PropTypes.number.isRequired,
   panelData: PropTypes.object.isRequired,
   displayInfo: PropTypes.object.isRequired,
-  relDispPositions: PropTypes.array.isRequired
+  relDispPositions: PropTypes.array.isRequired,
+  table: PropTypes.bool
 };
 
 Content.defaultProps = () => ({
@@ -196,9 +213,9 @@ const stateSelector = createSelector(
   configSelector, panelRenderersSelector, curDisplayInfoSelector,
   sidebarActiveSelector, pageNumSelector, filterCardinalitySelector,
   nPerPageSelector, localPanelsSelector,
-  relDispPositionsSelector, displayInfoSelector,
+  relDispPositionsSelector, displayInfoSelector, tableSelector,
   (cw, ch, ccd, ci, layout, aspect, labels, cinfo, cfg, panelRenderers, cdi, sidebar,
-    curPage, card, npp, localPanels, rdp, di) => {
+    curPage, card, npp, localPanels, rdp, di, tbl) => {
     const pPad = uiConsts.content.panel.pad; // padding on either side of the panel
     // height of row of cog label depends on overall panel height / width
     // so start with rough estimate of panel height / width
@@ -282,7 +299,8 @@ const stateSelector = createSelector(
       panelData,
       curDisplayInfo: cdi,
       displayInfo: di,
-      relDispPositions: rdp
+      relDispPositions: rdp,
+      table: tbl
     });
   }
 );
