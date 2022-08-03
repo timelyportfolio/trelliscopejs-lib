@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@tanstack/react-query": "^4.0.10",
     "browser-jsonp": "^1.1.5",
     "classnames": "^2.2.6",
     "crossfilter2": "^1.5.4",
