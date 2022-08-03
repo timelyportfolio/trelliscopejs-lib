@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import { Swipeable } from 'react-swipeable';
 import { max } from 'd3-array';
 import Panel from './Panel';
+import TablePanel from './TablePanel';
 import { setLabels, setLayout } from '../actions';
 import {
   contentWidthSelector, sidebarActiveSelector, contentHeightSelector
@@ -129,17 +130,16 @@ const Content = ({
 
     tbl = (
       <div className={classes.content} style={contentStyle}>
-        <table>
-          {panelMatrix.map((el) => (
-            <tr>
-              {el.labels.map((cell) => (
-                <td>
-                  {cell.value}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </table>
+        <TablePanel
+          cfg={cfg}
+          panelMatrix={panelMatrix}
+          panelRenderers={panelRenderers}
+          panelInterface={panelInterface}
+          panelData={panelData}
+          curDisplayInfo={curDisplayInfo}
+          displayInfo={displayInfo}
+          labels={labels}
+        />
       </div>
     );
   }
