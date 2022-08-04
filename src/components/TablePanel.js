@@ -2,11 +2,6 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import PropTypes from 'prop-types';
 import TablePanelCell from './TablePanelCell.js';
-//import { json as d3json } from 'd3-request';
-//import { default as getJSONP } from 'browser-jsonp'; // eslint-disable-line import/no-named-default
-//import { findWidget } from '../loadAssets';
-
-//const getJSON = (obj) => d3json(obj.url, (json) => obj.callback(json));
 
 function TablePanel({
   labels,
@@ -17,6 +12,7 @@ function TablePanel({
   cfg
 }) {
   const {name} = curDisplayInfo.info;
+  const panelInterface = displayInfo[name].info.panelInterface.type;
   const panelRenderer = panelRenderers[name].fn;
   const curIface = displayInfo[name].info.cogInterface;
   let filebase = `${cfg.cog_server.info.base}${curIface.group}`;
@@ -47,6 +43,7 @@ function TablePanel({
             <QueryClientProvider client={queryClient}>
               <TablePanelCell
                 panelRenderer={panelRenderer}
+                panelInterface={panelInterface}
                 url={`${filebase}/jsonp/${el.key}.jsonp`}
                 panelKey={el.key}
               />
@@ -61,6 +58,7 @@ function TablePanel({
 TablePanel.propTypes = {
   panelMatrix: PropTypes.array.isRequired,
   panelRenderers: PropTypes.object.isRequired,
+  panelInterface: PropTypes.string.isRequired,
   labels: PropTypes.array.isRequired,
   curDisplayInfo: PropTypes.object.isRequired,
   displayInfo: PropTypes.object.isRequired,

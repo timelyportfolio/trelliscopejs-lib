@@ -3,10 +3,10 @@ import {useQuery} from '@tanstack/react-query'
 
 function TablePanelCell({
   panelRenderer,
+  panelInterface,
   url,
   panelKey
 }) {
-
   const { status, error, data, isFetching } = useQuery(['panelcell',panelKey], async() => {
     const response = await fetch(url);
     return await response.text();
@@ -22,7 +22,13 @@ function TablePanelCell({
     return <td>Error: {error.message}</td>
   }
 
-  const panel = panelRenderer(/data:image\/png/.test(data) ? data.replace(/.*\("/,"").replace(/"\)/,"") : data, null, height)
+  let panel = <></>
+  if(panelInterface === 'image') {
+    panel = panelRenderer(data.replace(/.*\("/,"").replace(/"\)/,""), null, height)
+  } else if(panelInterface === 'react') {
+    panel = panelRenderer(JSON.parse(data.replace(/.*\("/,"").replace(/"\)/,"")))
+  }
+
   return (
     <td>
       {panel}
