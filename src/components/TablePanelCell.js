@@ -1,43 +1,35 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
+import {useQuery} from '@tanstack/react-query'
 
 function TablePanelCell({
   panelRenderer,
-  url
+  url,
+  panelKey
 }) {
 
-  const [content, setContent] = useState('');
+  const { status, error, data, isFetching } = useQuery(['panelcell',panelKey], async() => {
+    window.console.log(panelKey, url)
+    const response = await fetch(url);
+    return await response.text();
+  }, {refetchOnMount: false});
+
   const height = 100;
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetch(url);
-      let textContent = await response.text();
-      if(/data:image\/png/.test(textContent)) {
-        textContent = textContent.replace(/.*\("/,"").replace(/"\)/,"")
-        setContent(textContent)
-      }
-    })();
-  
-    return () => {
-      // this now gets called when the component unmounts
-    };
-  });
-
-  if(content) {
-    return (
-      <td>
-        <img
-          src={content}
-          alt="panel"
-          style={{ height }}
-        />
-      </td>
-    )
+  if(status === "loading") {
+    return <td>"Loading..."</td>
+  }
+ 
+  if(status === "error") {
+    return <td>Error: {error.message}</td>
   }
 
   return (
     <td>
-      {`loading...`}
+      <img
+        src={/data:image\/png/.test(data) ? data.replace(/.*\("/,"").replace(/"\)/,"") : data }
+        alt="panel"
+        style={{ height }}
+      />
     </td>
   )
 }

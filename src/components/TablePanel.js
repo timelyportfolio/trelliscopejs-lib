@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import PropTypes from 'prop-types';
 import TablePanelCell from './TablePanelCell.js';
 //import { json as d3json } from 'd3-request';
@@ -21,6 +22,8 @@ function TablePanel({
   let filebase = `${cfg.cog_server.info.base}${curIface.group}`;
   filebase = `${filebase}/${curIface.name}`;
 
+  const queryClient = new QueryClient();
+
   return (
     <table>
       <thead>
@@ -41,10 +44,13 @@ function TablePanel({
                 {cell.value}
               </td>
             ))}
-            <TablePanelCell
-              panelRenderer={panelRenderer}
-              url={`${filebase}/jsonp/${el.key}.jsonp`}
-            />
+            <QueryClientProvider client={queryClient}>
+              <TablePanelCell
+                panelRenderer={panelRenderer}
+                url={`${filebase}/jsonp/${el.key}.jsonp`}
+                panelKey={el.key}
+              />
+            </QueryClientProvider>
           </tr>
         ))}
       </tbody>
