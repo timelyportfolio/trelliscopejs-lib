@@ -8,12 +8,11 @@ function TablePanelCell({
 }) {
 
   const { status, error, data, isFetching } = useQuery(['panelcell',panelKey], async() => {
-    window.console.log(panelKey, url)
     const response = await fetch(url);
     return await response.text();
   }, {refetchOnMount: false});
 
-  const height = 100;
+  const height = 200;
 
   if(status === "loading") {
     return <td>"Loading..."</td>
@@ -23,13 +22,10 @@ function TablePanelCell({
     return <td>Error: {error.message}</td>
   }
 
+  const panel = panelRenderer(/data:image\/png/.test(data) ? data.replace(/.*\("/,"").replace(/"\)/,"") : data, null, height)
   return (
     <td>
-      <img
-        src={/data:image\/png/.test(data) ? data.replace(/.*\("/,"").replace(/"\)/,"") : data }
-        alt="panel"
-        style={{ height }}
-      />
+      {panel}
     </td>
   )
 }
