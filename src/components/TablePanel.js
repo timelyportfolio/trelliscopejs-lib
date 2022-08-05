@@ -58,7 +58,6 @@ function TablePanel({
 TablePanel.propTypes = {
   panelMatrix: PropTypes.array.isRequired,
   panelRenderers: PropTypes.object.isRequired,
-  panelInterface: PropTypes.string.isRequired,
   labels: PropTypes.array.isRequired,
   curDisplayInfo: PropTypes.object.isRequired,
   displayInfo: PropTypes.object.isRequired,

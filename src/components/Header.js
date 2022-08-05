@@ -3,17 +3,20 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import IconButton from '@material-ui/core/IconButton';
+import TableChartIcon from '@material-ui/icons/TableChart';
 import DisplayInfo from './DisplayInfo';
 import RelatedDisplays from './RelatedDisplays';
 import DisplaySelect from './DisplaySelect';
 import Pagination from './Pagination';
 import HeaderLogo from './HeaderLogo';
-import { setSelectedDisplay, fetchDisplay, setDialogOpen } from '../actions';
+import { setSelectedDisplay, fetchDisplay, setDialogOpen, setTable } from '../actions';
 import { windowWidthSelector } from '../selectors/ui';
 import { relatedDisplayGroupsSelector, displayGroupsSelector } from '../selectors/display';
 import {
   appIdSelector, configSelector, displayListSelector,
-  selectedDisplaySelector, dialogOpenSelector
+  selectedDisplaySelector, dialogOpenSelector,
+  tableSelector
 } from '../selectors';
 import uiConsts from '../assets/styles/uiConsts';
 
@@ -51,7 +54,7 @@ class Header extends React.Component {
   render() {
     const {
       classes, styles, displayList, selectedDisplay, relatedDisplayGroups,
-      displayGroups, doSetDialogOpen, dialogOpen
+      displayGroups, doSetDialogOpen, dialogOpen, setTable, isTable
     } = this.props;
     const { singleDisplay } = this.state;
 
@@ -112,6 +115,15 @@ class Header extends React.Component {
             <div className={classes.displayDesc}>
               {displayDesc}
             </div>
+          </div>
+          <div
+            style = {{display: 'inline-block', width: '38px', height: '48px'}}
+          >
+            <IconButton
+              onClick={() => setTable(!isTable)}
+            >
+              <TableChartIcon />
+            </IconButton>
           </div>
           <div className={classes.paginationContainer}>
             {pagination}
@@ -205,8 +217,8 @@ const staticStyles = {
 
 const styleSelector = createSelector(
   appIdSelector, windowWidthSelector, displayListSelector, displayGroupsSelector,
-  selectedDisplaySelector, relatedDisplayGroupsSelector, configSelector, dialogOpenSelector,
-  (appId, ww, dl, dg, sd, rdg, cfg, dialogOpen) => ({
+  selectedDisplaySelector, relatedDisplayGroupsSelector, configSelector, dialogOpenSelector, tableSelector,
+  (appId, ww, dl, dg, sd, rdg, cfg, dialogOpen, tbl) => ({
     styles: {
       headerContainer: {
         width: ww
@@ -229,7 +241,8 @@ const styleSelector = createSelector(
     displayGroups: dg,
     selectedDisplay: sd,
     relatedDisplayGroups: rdg,
-    dialogOpen
+    dialogOpen,
+    isTable: tbl
   })
 );
 
@@ -244,6 +257,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   doSetDialogOpen: (isOpen) => {
     dispatch(setDialogOpen(isOpen));
+  },
+  setTable: (isTable) => {
+    dispatch(setTable(isTable));
   }
 });
 
