@@ -152,7 +152,9 @@ Header.propTypes = {
   dialogOpen: PropTypes.bool.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   selectDisplay: PropTypes.func.isRequired,
-  doSetDialogOpen: PropTypes.func.isRequired
+  doSetDialogOpen: PropTypes.func.isRequired,
+  setTable: PropTypes.func.isRequired,
+  isTable: PropTypes.bool.isRequired
 };
 
 // ------ static styles ------
