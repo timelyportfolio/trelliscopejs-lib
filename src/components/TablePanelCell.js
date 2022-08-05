@@ -24,9 +24,9 @@ function TablePanelCell({
 
   let panel = <></>
   if(panelInterface === 'image') {
-    panel = panelRenderer(data.replace(/.*\("/,"").replace(/"\)/,""), null, height)
-  } else if(panelInterface === 'react') {
-    panel = panelRenderer(JSON.parse(data.replace(/.*\("/,"").replace(/"\)/,"")))
+    panel = panelRenderer(data.replace(/.*\("/,"").replace(/"\)/,""), null, height);
+  } else if(panelInterface === 'react' || panelInterface === "htmlwidget") {
+    panel = panelRenderer(JSON.parse(data.replace(/(__panel__.*\(){/,"{").replace(/\)$/,"")));
   }
 
   return (
