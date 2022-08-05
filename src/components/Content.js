@@ -268,7 +268,8 @@ const stateSelector = createSelector(
     return ({
       contentStyle: {
         width: cw,
-        height: ch
+        height: ch,
+        overflow: tbl ? 'auto' : null
       },
       ccd,
       ci,

@@ -21,8 +21,8 @@ function TablePanel({
   const queryClient = new QueryClient();
 
   return (
-    <table>
-      <thead>
+    <table style={{borderCollapse: 'collapse', margin: '20px'}}>
+      <thead style={{fontWeight: 'bold'}}>
         <tr>
           {labels.map((header) => (
             <td>
@@ -34,7 +34,7 @@ function TablePanel({
       </thead>
       <tbody>
         {panelMatrix.map((el) => (
-          <tr>
+          <tr style={{ borderBottom: '1px solid #ccc' }}>
             {el.labels.map((cell) => (
               <td>
                 {cell.value}
