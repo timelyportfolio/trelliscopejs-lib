@@ -46,6 +46,7 @@ function TablePanel({
                 panelInterface={panelInterface}
                 url={`${filebase}/jsonp/${el.key}.jsonp`}
                 panelKey={el.key}
+                name={name}
               />
             </QueryClientProvider>
           </tr>
