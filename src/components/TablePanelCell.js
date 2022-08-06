@@ -1,5 +1,54 @@
-import React from 'react';
-import {useQuery} from '@tanstack/react-query'
+import React, {useRef, useEffect} from 'react';
+import {useQuery} from '@tanstack/react-query';
+import { findWidget } from '../loadAssets';
+
+const evalEvals = (x) => {
+  if (!(x.evals instanceof Array)) {
+    x.evals = [x.evals]; // eslint-disable-line no-param-reassign
+  }
+  for (let i = 0; x.evals && i < x.evals.length; i += 1) {
+    window.HTMLWidgets.evaluateStringMember(x.x, x.evals[i]);
+  }
+}
+
+// try to do htmlwidgets with useRef
+//   should move this to its own component if it works
+const Widget = function({
+  data,
+  width,
+  height,
+  panelKey,
+  panelInterface,
+  status
+}) {
+  const containerRef = useRef();
+  // this initResult only helps if we expect refresh/invalidation on panel
+  const initResult = useRef();
+
+  useEffect(() => {
+    if(status !== 'loading' && status !== 'error') {
+      const binding = findWidget(panelInterface.deps.name);
+      const x = JSON.parse(data.replace(/(__panel__.*\(){/,"{").replace(/\)$/,""));
+      if (!initResult.current) {
+        if (binding.initialize) {
+          initResult.current = binding.initialize(containerRef.current, width, height);
+        }
+      }
+      evalEvals(x);
+      binding.renderValue(containerRef.current, x.x, initResult);
+    }
+  });
+
+  return (
+    <div id={`table_widget_outer_${panelKey}`}>
+      <div
+        ref={containerRef}
+        id={`table_widget_${panelKey}`}
+        style={{width:`${width}px`, height:`${height}px`}}
+      />
+    </div>
+  )
+}
 
 function TablePanelCell({
   panelRenderer,
@@ -8,30 +57,41 @@ function TablePanelCell({
   panelKey,
   name
 }) {
-  const { status, error, data, isFetching } = useQuery(['panelcell',panelKey], async() => {
+
+  const { status, error, data } = useQuery(['panelcell',panelKey], async() => {
     const response = await fetch(url);
     return await response.text();
   }, {refetchOnMount: false});
 
-  const height = 250;
-  const width = '100%';
+  const panelType = panelInterface.type;
 
-  if(status === "loading") {
-    return <td>"Loading..."</td>
+  const height = 250;
+  const width = 300;
+
+  let panel = <></>
+
+  /*if(status === "loading") {
+    panel = <td>"Loading..."</td>
   }
  
   if(status === "error") {
-    return <td>Error: {error.message}</td>
+    panel = <td>Error: {error.message}</td>
   }
+  */
 
-  let panel = <></>
-  if(panelInterface === 'image') {
+  if(panelType === 'image') {
     panel = panelRenderer(data.replace(/.*\("/,"").replace(/"\)/,""), null, height);
-  } else if(panelInterface === 'react') {
+  } else if (panelType === 'react') {
     panel = panelRenderer(JSON.parse(data.replace(/(__panel__.*\(){/,"{").replace(/\)$/,"")));
-  } else if(panelInterface === 'htmlwidget') {
-    // set post = true for now every time even though not correct
-    panel = panelRenderer(JSON.parse(data.replace(/(__panel__.*\(){/,"{").replace(/\)$/,"")), width, height, true, `${panelKey}_${name}`);
+  } else if (panelType === 'htmlwidget') {
+    panel = Widget({
+      data,
+      width,
+      height,
+      panelKey,
+      panelInterface,
+      status
+    });
   }
 
   return (

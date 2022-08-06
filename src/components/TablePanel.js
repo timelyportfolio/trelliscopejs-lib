@@ -12,7 +12,7 @@ function TablePanel({
   cfg
 }) {
   const {name} = curDisplayInfo.info;
-  const panelInterface = displayInfo[name].info.panelInterface.type;
+  const panelInterface = displayInfo[name].info.panelInterface;
   const panelRenderer = panelRenderers[name].fn;
   const curIface = displayInfo[name].info.cogInterface;
   let filebase = `${cfg.cog_server.info.base}${curIface.group}`;
@@ -24,8 +24,10 @@ function TablePanel({
     <table style={{borderCollapse: 'collapse', margin: '20px'}}>
       <thead style={{fontWeight: 'bold'}}>
         <tr>
-          {labels.map((header) => (
-            <td>
+          {labels.map((header,i) => (
+            <td
+              key={i}
+            >
               {header}
             </td>
           ))}
@@ -34,9 +36,12 @@ function TablePanel({
       </thead>
       <tbody>
         {panelMatrix.map((el) => (
-          <tr style={{ borderBottom: '1px solid #ccc' }}>
-            {el.labels.map((cell) => (
-              <td>
+          <tr key={el.key} style={{ borderBottom: '1px solid #ccc' }}>
+            {el.labels.map((cell, i) => (
+              <td
+                // eslint-disable-next-line react/no-array-index-key
+                key={`${el.key}_${i}`}
+              >
                 {cell.value}
               </td>
             ))}
