@@ -80,9 +80,9 @@ function TablePanelCell({
   */
 
   if(panelType === 'image') {
-    panel = panelRenderer(data.replace(/.*\("/,"").replace(/"\)/,""), null, height);
+    panel = data ? panelRenderer(data.replace(/.*\("/,"").replace(/"\)/,""), null, height) : <div>Loading...</div>;
   } else if (panelType === 'react') {
-    panel = panelRenderer(JSON.parse(data.replace(/(__panel__.*\(){/,"{").replace(/\)$/,"")));
+    panel = data ? panelRenderer(JSON.parse(data.replace(/(__panel__.*\(){/,"{").replace(/\)$/,""))) : <div>Loading...</div>;
   } else if (panelType === 'htmlwidget') {
     panel = Widget({
       data,
